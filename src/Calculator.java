@@ -3,7 +3,7 @@
  * converts into an Equation that can be solved.
  *
  * @author beneathTwo
- * @version 12.06.2021
+ * @version 12.07.2021
  */
 public class Calculator
 {
@@ -84,18 +84,18 @@ public class Calculator
             if (Character.isDigit(c) || c == '.' || c == '-')
             {
                 // System.out.print("indexDouble: " + c + " ");
-                if (c == '-' && ++i < len) // adjust for negative number
-                    c = str.charAt(i);
+                int l = i;
+                if (c == '-' && ++l < len) // adjust for negative number
+                    c = str.charAt(l);
 
-                int l = i, dec = 0;
+                int dec = 0;
                 while ((Character.isDigit(c) || c == '.') && ++l < len)
                 {
-                    if (c == '.')
-                        if (++dec > 1)
-                            if ((l - i) > 1 && str.charAt(l - 1) != '.') // second condition checks ".." exception
-                                return new int[]{i, l}; // early termination
-                            else
-                                return new int[]{-3}; // no numbers found
+                    if (c == '.' && ++dec > 1)
+                        if ((l - i) > 0 && str.charAt(--l) != '.') // second condition checks ".." exception
+                            return new int[]{i, l}; // early termination
+                        else
+                            return new int[]{-3}; // no numbers found
 
                     c = str.charAt(l);
                     // System.out.print(c + " ");
@@ -103,13 +103,14 @@ public class Calculator
 
                 if ((l - i) < 2)
                 {
-                    char lChar = str.charAt(l - 1);
-                    if (lChar == '.') // decimal not attached to number
+                    char lastChar = str.charAt(l - 1);
+                    if (lastChar == '.') // decimal not attached to number
                         return new int[]{-3};
-                    else if (lChar == '-' && !Character.isDigit(c)) // lone negative char
+                    else if (lastChar == '-' && !Character.isDigit(c)) // lone negative char
                         return new int[]{-3};
                 }
 
+                // System.out.println("final return " + dec);
                 return new int[]{i, l}; // final number
             }
         }
