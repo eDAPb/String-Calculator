@@ -11,29 +11,28 @@ public class Calculator
     static private String str;
     static private final char[] opList = { '^', '*', '/', '+', '-' };
 
-    public static double calcStr(String s, int f, Boolean equal)
+    public static double string(String s, int f, Boolean equal)
     {
         str = s;
-
         // Initialize equation with first part of str.
-        Equation a = convert(f);
-        double total = a.getAnswer(); // Get the answer for the first equation.
-        // System.out.println(total);
+        Equation eq = convert(f);
 
-        for (int l = a.getLE(); l < str.length() && l >= 0; l = a.getLE())
+        for (int l = eq.getLE(); l < str.length() && l >= 0; l = eq.getLE())
         {
-            str = total + " " + str.substring(l); // Create new string.
-            if (str.length() < 3) // Check it can fit an equation.
-                return total;
+            str = eq.getAnswer() + " " + str.substring(l); // Create new string.
+            if (str.length() < 3 || convert(0).getLE() < 0)
+            {
+                System.out.print(equal?"= ":"");
+                return eq.getAnswer();
+            }
             // System.out.println(str);
-            a.set(convert(0)); // Start from beginning again.
-            total = a.getAnswer();
-            // System.out.println(total);
+            eq.set(convert(0)); // Start from beginning again.
         }
 
-        if (equal && a.getLE() > 0)
+        if (equal && eq.getLE() > 0)
             System.out.print("= ");
-        return total;
+
+        return eq.getAnswer();
     }
 
 //    public static void setGlobalString(String s)
@@ -93,7 +92,7 @@ public class Calculator
                 boolean digits = false;
                 for (int dec = 0; l < len && Character.isDigit(c) || c == '.'; ++l)
                 {
-                    digits = Character.isDigit(c) || digits;
+                    digits = Character.isDigit(c) || digits; // Are there digits?
 
                     if (c == '.' && ++dec > 1)
                         if (digits) // make sure there are digits to go with decimal.
@@ -108,8 +107,8 @@ public class Calculator
                 }
                 if (!Character.isDigit(c))
                     --l;
-                // Detects lone '.' or '-'
-                return !digits ? new int[]{-3} : new int[]{i, l};
+
+                return digits ? new int[]{i, l} : new int[]{-3}; // Detects lone '.' or '-'
             }
         }
 
@@ -120,8 +119,10 @@ public class Calculator
     {
         final int len = str.length();
 
-        if (f >= len || f < 0)
+        if (f > len || f < 0)
             return -1;  // start out of range
+        else if (f == len - 1)
+            return -2;
 
         for (int i = f; i < len; ++i)
             for (char c : search)

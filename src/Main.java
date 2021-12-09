@@ -14,13 +14,13 @@ public class Main
     public static void main(String[] args)
     {
         Scanner kbd = new Scanner(System.in);
-        String in = kbd.nextLine();
+        String in = "";
 
         String acc = "%.2f\n";
         while (!in.equals("exit"))
         {
-            System.out.printf(acc, Calculator.calcStr(in, 0, true));
             in = kbd.nextLine();
+            System.out.printf(acc, Calculator.string(in, 0, true));
 
             if (in.equals("acc"))
             {
