@@ -20,13 +20,17 @@ public class Main
         while (!in.equals("exit"))
         {
             in = kbd.nextLine();
-            System.out.printf(acc, Calculator.string(in, 0, true));
 
             if (in.equals("acc"))
             {
                 System.out.print("Set accuracy: ");
-                acc = "%." + kbd.nextInt() + "f\n";
+                int val = kbd.nextInt();
+                acc = val > 0 ? "%." + val + "f\n" : acc;
+                kbd.nextLine();
+                continue;
             }
+
+            System.out.printf(acc, Calculator.string(in, 0, true));
         }
     }
 }
