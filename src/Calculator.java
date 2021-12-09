@@ -3,7 +3,7 @@
  * converts into an Equation that can be solved.
  *
  * @author beneathTwo
- * @version 12.07.2021
+ * @version 12.09.2021
  */
 public class Calculator
 {
@@ -74,48 +74,46 @@ public class Calculator
     {
         final int len = str.length();
 
-        if (f >= len || f < 0)  // start out of range
-            return new int[]{-1, 0};
+        if (f >= len || f < 0)
+            return new int[]{-1};
 
-        char c; // current character
+        char c; // index character
         for (int i = f; i < len; ++i)
         {
             c = str.charAt(i);
-            if (Character.isDigit(c) || c == '.' || c == '-')
+            if (c == '.' || c == '-' || Character.isDigit(c))
             {
-                // System.out.print("indexDouble: " + c + " ");
                 int l = i;
-                if (c == '-' && ++l < len) // adjust for negative number
-                    c = str.charAt(l);
+                if (c == '-') // adjust for negative symbol.
+                    if (++l < len)
+                        c = str.charAt(l);
+                    else
+                        return new int[]{-3};
 
-                int dec = 0;
-                while ((Character.isDigit(c) || c == '.') && ++l < len)
+                boolean digits = false;
+                for (int dec = 0; l < len && Character.isDigit(c) || c == '.'; ++l)
                 {
+                    digits = Character.isDigit(c) || digits;
+
                     if (c == '.' && ++dec > 1)
-                        if ((l - i) > 0 && str.charAt(--l) != '.') // second condition checks ".." exception
-                            return new int[]{i, l}; // early termination
+                        if (digits) // make sure there are digits to go with decimal.
+                            return new int[]{i, --l}; // remove extra decimal.
                         else
-                            return new int[]{-3}; // no numbers found
+                        {
+                            i = l - 1; // make second decimal the new first.
+                            dec = 1; // ignore decimal before
+                        }
 
                     c = str.charAt(l);
-                    // System.out.print(c + " ");
                 }
-
-                if ((l - i) < 2)
-                {
-                    char lastChar = str.charAt(l - 1);
-                    if (lastChar == '.') // decimal not attached to number
-                        return new int[]{-3};
-                    else if (lastChar == '-' && !Character.isDigit(c)) // lone negative char
-                        return new int[]{-3};
-                }
-
-                // System.out.println("final return " + dec);
-                return new int[]{i, l}; // final number
+                if (!Character.isDigit(c))
+                    --l;
+                // Detects lone '.' or '-'
+                return !digits ? new int[]{-3} : new int[]{i, l};
             }
         }
 
-        return new int[]{-3}; // no numbers found
+        return new int[]{-3};  // No numbers found.
     }
 
     private static int indexChar(char[] search, final int f)
