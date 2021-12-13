@@ -3,7 +3,7 @@
  * two numbers and the operation.
  *
  * @author beneathTwo
- * @version 12.06.2021
+ * @version 12.13.2021
  */
 public class Equation
 {
@@ -55,8 +55,8 @@ public class Equation
         if (ans.length > 1)
         {
             // translate error code to position in array
-            int out = (int)(ans[1] - (ans[1] * 2));
-            System.out.print(errors[out] + " : ");
+            int err = (int)(ans[1] - (ans[1] * 2));
+            System.out.print(errors[err] + " : ");
             return ans[1];
         }
         else
@@ -78,7 +78,7 @@ public class Equation
             case '^':
                 return new double[]{Math.pow(n1, n2)};
             default:
-                return new double[]{0, lastElement}; // LE used as error code here.
+                return new double[]{0, lastElement}; // LE used as error code here
         }
     }
 }
