@@ -15,13 +15,13 @@ public class Calculator
     {
         str = s;
         // initialize equation with first part of str
-        Equation eq = convert(f);
+        Equation eq = convert(f), newEq;
 
         // longer equation
         for (int l = eq.getLE(); l < str.length() && l >= 0; l = eq.getLE())
         {
             str = eq.getAnswer() + " " + str.substring(l); // create new string
-            Equation newEq = convert(0);
+            newEq = convert(0);
             if (newEq.getLE() < 0) // error
             {
                 System.out.print(equal ? "= " : "");
