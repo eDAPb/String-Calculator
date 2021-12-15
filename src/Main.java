@@ -28,8 +28,8 @@ public class Main
             else if (in.equals("acc"))
             {
                 System.out.print("Set accuracy: ");
-                int val = kbd.nextInt();
-                acc = val > 0 ? "%." + val + "f\n" : acc;
+                int val = (int)kbd.nextDouble();
+                acc = (val > 0 && val < 7) ? "%." + val + "f\n" : acc;
                 kbd.nextLine();
             }
             else
