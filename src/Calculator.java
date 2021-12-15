@@ -3,7 +3,7 @@
  * converts into an Equation that can be solved.
  *
  * @author beneathTwo
- * @version 12.13.2021
+ * @version 12.15.2021
  */
 public class Calculator
 {
@@ -11,22 +11,24 @@ public class Calculator
     static private String str;
     static private final char[] opList = { '^', '*', '/', '+', '-' };
 
-    public static double string(String s, int f, Boolean equal)
+    public static double string(String s, final int f, Boolean equal)
     {
         str = s;
         // initialize equation with first part of str
         Equation eq = convert(f);
 
+        // longer equation
         for (int l = eq.getLE(); l < str.length() && l >= 0; l = eq.getLE())
         {
             str = eq.getAnswer() + " " + str.substring(l); // create new string
-            if (str.length() < 3 || convert(0).getLE() < 0)
+            Equation newEq = convert(0);
+            if (newEq.getLE() < 0) // error
             {
                 System.out.print(equal ? "= " : "");
                 return eq.getAnswer();
             }
-            // System.out.println(str);
-            eq.set(convert(0)); // start from beginning again
+
+            eq.set(newEq);
         }
 
         if (equal && eq.getLE() > 0)
@@ -35,10 +37,10 @@ public class Calculator
         return eq.getAnswer();
     }
 
-//    public static void setGlobalString(String s)
-//    {
-//        str = s;
-//    }
+    public static double string(String s, Boolean equal)
+    {
+        return string(s, 0, equal);
+    }
 
     public static Equation convert(final int f)
     {
@@ -59,7 +61,7 @@ public class Calculator
         char op = str.charAt(index[0]);
         // System.out.println(op);
 
-        if (++index[0] >= str.length()) // ignore op
+        if (++index[0] >= str.length()) // ignore op to not confuse next num
             return new Equation(-3);
 
         index = indexDouble(index[0]);
@@ -90,7 +92,6 @@ public class Calculator
                 boolean digit = Character.isDigit(c), digits = digit;
                 for (int dec = 0; l < str.length() && (digit || c == '.'); ++l)
                 {
-                    digits = digit || digits; // Are there digits?
                     if (c == '.' && ++dec > 1)
                         if (digits) // make sure there are digits to go with decimal
                             return new int[]{i, --l}; // remove extra decimal
@@ -102,6 +103,7 @@ public class Calculator
 
                     c = str.charAt(l);
                     digit = Character.isDigit(c);
+                    digits = digit || digits;
                 }
 
                 if (digits)
@@ -116,22 +118,22 @@ public class Calculator
         return new int[]{-3};  // no numbers found
     }
 
-    private static boolean searchList(char[] list, final int s)
+    private static boolean searchList(char[] list, final int search)
     {
         for (char c : list)
-            if (c == s)
+            if (c == search)
                 return true;
 
         return false;
     }
 
-    private static int indexChar(char[] search, final int f)
+    private static int indexChar(char[] list, final int f)
     {
         if (f > str.length() || f < 0)
             return -1;  // start out of range
 
         for (int i = f; i < str.length(); ++i)
-            if (searchList(search, str.charAt(i)))
+            if (searchList(list, str.charAt(i)))
                 return i;
 
         return -2;  // no character found

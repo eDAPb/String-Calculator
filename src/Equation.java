@@ -3,7 +3,7 @@
  * two numbers and the operation.
  *
  * @author beneathTwo
- * @version 12.13.2021
+ * @version 12.15.2021
  */
 public class Equation
 {
@@ -51,16 +51,13 @@ public class Equation
     public double getAnswer()
     {
         double[] ans = this.solve();
-
         if (ans.length > 1)
         {
-            // translate error code to position in array
-            int err = (int)(ans[1] - (ans[1] * 2));
-            System.out.print(errors[err] + " : ");
+            System.out.print(errors[(int)-ans[1]] + " : ");
             return ans[1];
         }
-        else
-            return ans[0];
+
+        return ans[0];
     }
 
     private double[] solve()

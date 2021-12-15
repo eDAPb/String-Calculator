@@ -7,7 +7,7 @@ import java.util.Scanner;
  * to set the accuracy. Does not follow PEMDAS.
  *
  * @author beneathTwo
- * @version 12.13.21
+ * @version 12.15.21
  */
 
 public class Main
@@ -33,7 +33,7 @@ public class Main
                 kbd.nextLine();
             }
             else
-                System.out.printf(acc, Calculator.string(in, 0, true));
+                System.out.printf(acc, Calculator.string(in, true));
         }
     }
 }
