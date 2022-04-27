@@ -1,4 +1,4 @@
-# String-Calculator-Java
+# String-Calculator
 A calculator that reads a string and returns the corresponding answer on the equation within that string. (Does not follow PEMDAS)
 
 ## Available operations
